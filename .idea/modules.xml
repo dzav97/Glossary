@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Project Glossary.iml" filepath="$PROJECT_DIR$/.idea/Project Glossary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Glossaryy.iml" filepath="$PROJECT_DIR$/.idea/modules/Glossaryy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Glossaryy.app.unitTest.iml" />
     </modules>
   </component>
 </project>

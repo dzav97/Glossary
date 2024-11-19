@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.glossaryy">
+
 
     <application
         android:allowBackup="true"
@@ -43,6 +45,24 @@
         <activity
             android:name=".MainActivity"
             android:label="Main"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+
+        <activity
+            android:name=".Home"
+            android:label="Home"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+
+        <activity
+            android:name=".PeringkatActivity"
+            android:label="Peringkat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+
+        <activity
+            android:name=".QuizHistoryActivity"
+            android:label="Riwayat"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -51,16 +53,25 @@ class SignInActivity : ComponentActivity() {
             Text(
                 text = "GLOSSARY",
                 style = MaterialTheme.typography.headlineLarge,
-                color = Color(0xFF3D57A1) // Purple color
+                color = Color(0xFF2C2C54) // Dark blue color
             )
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Logo Image
+            Image(
+                painter = painterResource(id = R.drawable.logo), // Replace with your logo resource
+                contentDescription = "Logo",
+                modifier = Modifier.size(100.dp)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Username Input Field
             OutlinedTextField(
                 value = username.value,
                 onValueChange = { username.value = it },
-                label = { Text("Pengguna") },
+                label = { Text("Username") },
                 placeholder = { Text("EX : elda") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
@@ -77,7 +88,7 @@ class SignInActivity : ComponentActivity() {
                 onClick = { /* Handle forgot username */ },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(text = "Lupa nama pengguna", color = Color(0xFF3D57A1))
+                Text(text = "Lupa username", color = Color(0xFF2C2C54))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -86,7 +97,7 @@ class SignInActivity : ComponentActivity() {
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
-                label = { Text("Sandi") },
+                label = { Text("Password") },
                 placeholder = { Text("EX : dwi24") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
@@ -104,7 +115,7 @@ class SignInActivity : ComponentActivity() {
                 onClick = { /* Handle forgot password */ },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(text = "Lupa sandi", color = Color(0xFF3D57A1))
+                Text(text = "Lupa password", color = Color(0xFF2C2C54))
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -124,8 +135,7 @@ class SignInActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors( Color(0xFF3D57A1) // Set background color directly
-                )
+                colors = ButtonDefaults.buttonColors(Color(0xFF2C2C54)) // Set background color directly
             ) {
                 Text("Masuk", color = Color.White)
             }
@@ -140,7 +150,7 @@ class SignInActivity : ComponentActivity() {
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text(text = "Belum punya akun? Daftar Sekarang", color = Color(0xFF3D57A1))
+                Text(text = "Belum punya akun? Daftar Sekarang", color = Color(0xFF2C2C54))
             }
         }
     }

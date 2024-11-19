@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardActions
@@ -68,7 +67,7 @@ class SignUpActivity : ComponentActivity() {
             OutlinedTextField(
                 value = username.value,
                 onValueChange = { username.value = it },
-                label = { Text("Nama Pengguna") },
+                label = { Text("Username") },
                 placeholder = { Text("EX : elda") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
@@ -84,7 +83,7 @@ class SignUpActivity : ComponentActivity() {
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
-                label = { Text("Sandi") },
+                label = { Text("Password") },
                 placeholder = { Text("EX : dwi24") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
@@ -161,7 +160,8 @@ class SignUpActivity : ComponentActivity() {
             Button(
                 onClick = {
                     // Show a Toast message and navigate to SignInActivity
-                    Toast.makeText(applicationContext, "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Sign Up Successful!", Toast.LENGTH_SHORT)
+                        .show()
                     val intent = Intent(this@SignUpActivity, SignInActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -175,5 +175,4 @@ class SignUpActivity : ComponentActivity() {
             }
         }
     }
-}
-
+    }

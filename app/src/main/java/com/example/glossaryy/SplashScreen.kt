@@ -7,12 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +34,7 @@ class SplashScreenActivity : ComponentActivity() {
     @Composable
     fun SplashScreen() {
         LaunchedEffect(Unit) {
-            delay(3000)  // 2 seconds delay
+            delay(3000)  // 3 seconds delay
             val intent = Intent(this@SplashScreenActivity, SignInActivity::class.java)
             startActivity(intent)
             finish()
@@ -43,7 +43,14 @@ class SplashScreenActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF6200EE)), // Purple background
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF3A007D), // Dark purple
+                            Color.White // White
+                        )
+                    )
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -52,8 +59,6 @@ class SplashScreenActivity : ComponentActivity() {
                 contentDescription = "Glossary Quiz Logo",
                 modifier = Modifier.size(150.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Glossary Quiz", color = Color.White, fontSize = 32.sp)
         }
     }
 }
