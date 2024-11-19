@@ -6,10 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-<<<<<<< HEAD
-=======
 import androidx.compose.foundation.background
->>>>>>> d1e79a364866da39a379cfd5bc400307459a1232
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
