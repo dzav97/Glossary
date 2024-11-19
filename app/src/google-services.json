@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "663482149781",
+    "project_id": "glossary-78786",
+    "storage_bucket": "glossary-78786.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663482149781:android:6c9599f0504b8028cc249c",
+        "android_client_info": {
+          "package_name": "com.exsample.glossaryy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLrjPk-32TFAoErlv2kprF09CYOS33k44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
