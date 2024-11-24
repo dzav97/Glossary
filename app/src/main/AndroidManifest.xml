@@ -71,11 +71,7 @@
             android:label="Riwayat"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
-        <activity
-            android:name=".Quiz.QuizSMP"
-            android:label="Riwayat"
-            android:theme="@style/Theme.Glossaryy"
-            android:exported="true" />
+
 
     </application>
 
