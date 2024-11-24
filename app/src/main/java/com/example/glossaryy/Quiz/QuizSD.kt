@@ -28,11 +28,16 @@ class QuizSD : ComponentActivity() {
 @Composable
 fun QuizApp() {
     val questions = listOf(
-        Question("Sebuah tabung memiliki jari-jari 7 cm dan tinggi 10 cm. Berapakah volume tabung tersebut?", listOf("1540 cm3", "1352 cm3", "1232 cm3", "1496 cm3"), 0),
-        Question("Jika luas persegi adalah 144cm2, berapakah panjang sisinya?", listOf("10cm", "12cm", "14cm", "16cm"), 1),
-        Question("Planet manakah yang paling dekat dengan matahari?", listOf("Venus", "Mars", "Merkurius", "Bumi"), 2),
-        Question("Manakah dibawah ini yang merupakan sumber energi terbarukan?", listOf("Batubara", "Minyak Bumi", "Angin", "Gas Alam"), 2),
-        Question("Siapakah proklamator Kemerdekaan Indonesia?", listOf("Mohammad Hatta dan Soekarno", "Soeharto dan Soekarno", "Mohammad Hatta dan Soeharto", "Soekarno dan Jusuf Kalla"), 0)
+        QuestionSD("Sebuah tabung memiliki jari-jari 7 cm dan tinggi 10 cm. Berapakah volume tabung tersebut?", listOf("1540 cm3", "1352 cm3", "1232 cm3", "1496 cm3"), 0),
+        QuestionSD("Jika luas persegi adalah 144cm2, berapakah panjang sisinya?", listOf("10cm", "12cm", "14cm", "16cm"), 1),
+        QuestionSD("Planet manakah yang paling dekat dengan matahari?", listOf("Venus", "Mars", "Merkurius", "Bumi"), 2),
+        QuestionSD("Manakah dibawah ini yang merupakan sumber energi terbarukan?", listOf("Batubara", "Minyak Bumi", "Angin", "Gas Alam"), 2),
+        QuestionSD("Siapakah proklamator Kemerdekaan Indonesia?", listOf("Mohammad Hatta dan Soekarno", "Soeharto dan Soekarno", "Mohammad Hatta dan Soeharto", "Soekarno dan Jusuf Kalla"), 0),
+        QuestionSD("Apa nama ibu kota Indonesia?", listOf("Jakarta", "Bandung", "Surabaya", "Semarang"), 0),
+        QuestionSD("Apa yang dimaksud dengan 'Sinonim'?", listOf("Kata yang berlawanan makna", "Kata yang sama makna", "Kata yang hampir punah", "Kata yang yang sering digunakna"), 1),
+        QuestionSD("Cermatilah kalimat berikut: 'Ani sedang membaca buku di taman.'Kata 'di taman' dalam kalimat tersebut merupakan jenis keterangan apa?", listOf("Keterangan Waktu", "Keterangan cara", "Keterangan alasan", "Keterangan tempat"), 3),
+        QuestionSD("Choose the corrent form of the verb: 'She ---- to the market yesterday", listOf("go","went","goes","going"), 1),
+        QuestionSD("What is the plural form of'child'", listOf("Childs", "Chlidren", "Childes", "Childeren"),1)
     )
 
     var currentQuestionIndex by remember { mutableStateOf(0) }
@@ -139,8 +144,9 @@ fun AnswerButton(
     }
 }
 
-data class Question(
+data class QuestionSD(
     val question: String,
     val answers: List<String>,
     val correctAnswerIndex: Int
 )
+
