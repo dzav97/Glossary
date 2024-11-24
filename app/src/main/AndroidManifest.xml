@@ -71,7 +71,26 @@
             android:label="Riwayat"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
-
+        <activity
+            android:name=".Quiz.QuizSMP"
+            android:label="Riwayat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+        <activity
+            android:name=".Quiz.QuizSMA"
+            android:label="Riwayat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+        <activity
+            android:name=".Quiz.QuizUmum"
+            android:label="Riwayat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
+        <activity
+            android:name=".ProfilActivity"
+            android:label="Riwayat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
 
     </application>
 
