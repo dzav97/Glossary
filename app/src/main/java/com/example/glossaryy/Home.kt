@@ -41,10 +41,10 @@ fun MainScreen() {
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFF4B0082), Color(0xFFFFF8DC))
+                    colors = listOf(Color(0xFF381E72), Color(0xFFFFFFEE))
                 )
             )
-            .padding(16.dp)
+            //.padding(16.dp)
     ) {
         Text(
             text = "GLOSSARY",
@@ -157,7 +157,7 @@ fun CategoryCard(title: String, imageRes: Int) {
 @Composable
 fun HomeBottomNavigationBar() {
     BottomAppBar(
-        containerColor = Color(0xFF4B0082),
+        containerColor = Color(0xFF3C0CA6),
         contentColor = Color.White,
         modifier = Modifier.height(80.dp)
     ) {

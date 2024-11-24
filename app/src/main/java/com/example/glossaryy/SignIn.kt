@@ -242,7 +242,7 @@ class SignInActivity : ComponentActivity() {
                         }
                     )
                     // Spacer antara input username dan "Lupa nama pengguna"
-                    Spacer(modifier = Modifier.height(2.dp))
+                    //Spacer(modifier = Modifier.height(0.dp))
 
                     // Lupa nama pengguna
                     TextButton(
@@ -270,7 +270,7 @@ class SignInActivity : ComponentActivity() {
                         visualTransformation = PasswordVisualTransformation()
                     )
                     // Spacer antara input password dan "Lupa sandi"
-                    Spacer(modifier = Modifier.height(3.dp))
+                    //Spacer(modifier = Modifier.height(0.dp))
 
                     // Lupa sandi
                     TextButton(
@@ -286,7 +286,7 @@ class SignInActivity : ComponentActivity() {
                     Button(
                         onClick = {
                             if (username.value == "elda" && password.value == "dwi24") {
-                                val intent = Intent(this@SignInActivity, MainActivity::class.java)
+                                val intent = Intent(this@SignInActivity, Home::class.java)
                                 startActivity(intent)
                                 finish()
                             } else {
