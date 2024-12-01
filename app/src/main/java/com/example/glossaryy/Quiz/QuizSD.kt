@@ -40,22 +40,26 @@ fun QuizApp() {
         QuestionSD("Manakah dibawah ini yang merupakan sumber energi terbarukan?", listOf("Batubara", "Minyak Bumi", "Angin", "Gas Alam"), 2),
         QuestionSD("Siapakah proklamator Kemerdekaan Indonesia?", listOf("Mohammad Hatta dan Soekarno", "Soeharto dan Soekarno", "Mohammad Hatta dan Soeharto", "Soekarno dan Jusuf Kalla"), 0),
         QuestionSD("Apa nama ibu kota Indonesia?", listOf("Jakarta", "Bandung", "Surabaya", "Semarang"), 0),
-        QuestionSD("Apa yang dimaksud dengan 'Sinonim'?", listOf("Kata yang berlawanan makna", "Kata yang sama makna", "Kata yang hampir punah", "Kata yang yang sering digunakna"), 1),
-        QuestionSD("Cermatilah kalimat berikut: 'Ani sedang membaca buku di taman.'Kata 'di taman' dalam kalimat tersebut merupakan jenis keterangan apa?", listOf("Keterangan Waktu", "Keterangan cara", "Keterangan alasan", "Keterangan tempat"), 3),
-        QuestionSD("Choose the corrent form of the verb: 'She ---- to the market yesterday", listOf("go","went","goes","going"), 1),
-        QuestionSD("What is the plural form of'child'", listOf("Childs", "Chlidren", "Childes", "Childeren"),1)
+        QuestionSD("Apa yang dimaksud dengan 'Sinonim'?", listOf("Kata yang berlawanan makna", "Kata yang sama makna", "Kata yang hampir punah", "Kata yang sering digunakan"), 1),
+        QuestionSD("Cermatilah kalimat berikut: 'Ani sedang membaca buku di taman.' Kata 'di taman' dalam kalimat tersebut merupakan jenis keterangan apa?", listOf("Keterangan Waktu", "Keterangan Cara", "Keterangan Alasan", "Keterangan Tempat"), 3),
+        QuestionSD("Choose the correct form of the verb: 'She ---- to the market yesterday'", listOf("go", "went", "goes", "going"), 1),
+        QuestionSD("What is the plural form of 'child'?", listOf("Childs", "Children", "Childes", "Childeren"), 1)
     )
+
+    // Acak soal dan pilih 5 soal pertama
+    val randomQuestions = questions.shuffled().take(5)
 
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var selectedAnswerIndex by remember { mutableStateOf<Int?>(null) }
     var answerShown by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableStateOf(10) }
     var showExitDialog by remember { mutableStateOf(false) }
+    var score by remember { mutableStateOf(0) } // Menyimpan skor
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     fun goToNextQuestion() {
-        if (currentQuestionIndex < questions.size - 1) {
+        if (currentQuestionIndex < randomQuestions.size - 1) {
             currentQuestionIndex++
             selectedAnswerIndex = null
             answerShown = false
@@ -102,52 +106,11 @@ fun QuizApp() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(Color(0xff381E72), Color(0xffffffff))))
-            .padding(16.dp),
+            .background(Brush.verticalGradient(listOf(Color(0xff381E72), Color(0xffffffff)))),
         verticalArrangement = Arrangement.Center,
-        //horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Jumlah soal yang sudah dikerjakan
-        /*Text(
-            text = "Soal ${currentQuestionIndex + 1}/${questions.size}",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Progress bar untuk countdown detik
-        LinearProgressIndicator(
-            progress = timeLeft / 10f,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp),
-            color = Color.Green
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Teks pertanyaan
-        Text(text = questions[currentQuestionIndex].question, fontSize = 20.sp)
-
-        Spacer(modifier = Modifier.height(16.dp))
-        questions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
-            AnswerButton(
-                answer = answer,
-                isSelected = selectedAnswerIndex == index,
-                isCorrect = index == questions[currentQuestionIndex].correctAnswerIndex,
-                showAnswer = answerShown,
-                onClick = {
-                    if (!answerShown) {
-                        selectedAnswerIndex = index
-                        answerShown = true
-                        scope.launch {
-                            delay(1000L) // Tampilkan jawaban selama 1 detik sebelum lanjut
-                            goToNextQuestion()
-                        }
-                    }
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }*/
 
         // Header dengan progress soal
         Row(
@@ -157,10 +120,9 @@ fun QuizApp() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Tombol panah kembali
             IconButton(onClick = { showExitDialog = true }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_arrow_back_24), // Gambar panah kembali
+                    painter = painterResource(id = R.drawable.level1), // Gambar panah kembali
                     contentDescription = "Kembali",
                     tint = Color.White
                 )
@@ -172,7 +134,7 @@ fun QuizApp() {
                 color = Color.White
             )
             Text(
-                text = "${currentQuestionIndex + 1}/${questions.size}",
+                text = "${currentQuestionIndex + 1}/${randomQuestions.size}",
                 fontSize = 18.sp,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
@@ -191,7 +153,7 @@ fun QuizApp() {
 
         // Pertanyaan
         Text(
-            text = questions[currentQuestionIndex].question,
+            text = randomQuestions[currentQuestionIndex].question,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
@@ -200,16 +162,20 @@ fun QuizApp() {
 
         // Pilihan jawaban
         Column(modifier = Modifier.fillMaxWidth()) {
-            questions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
+            randomQuestions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
                 AnswerButton(
                     answer = answer,
                     isSelected = selectedAnswerIndex == index,
-                    isCorrect = index == questions[currentQuestionIndex].correctAnswerIndex,
+                    isCorrect = index == randomQuestions[currentQuestionIndex].correctAnswerIndex,
                     showAnswer = answerShown,
                     onClick = {
                         if (!answerShown) {
                             selectedAnswerIndex = index
                             answerShown = true
+                            // Tambahkan poin jika jawabannya benar
+                            if (index == randomQuestions[currentQuestionIndex].correctAnswerIndex) {
+                                score += 10
+                            }
                             scope.launch {
                                 delay(1500L) // Tampilkan jawaban selama 1 detik sebelum lanjut
                                 goToNextQuestion()
@@ -219,6 +185,17 @@ fun QuizApp() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
+        }
+
+        // Menampilkan skor setelah semua soal selesai
+        if (currentQuestionIndex == randomQuestions.size - 1 && answerShown) {
+            Text(
+                text = "Skor Anda: $score",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
         }
     }
 }
@@ -232,9 +209,9 @@ fun AnswerButton(
     onClick: () -> Unit
 ) {
     val backgroundColor = when {
-        showAnswer && isCorrect -> Color(0xFF4CAF50)
-        showAnswer && !isCorrect && isSelected -> Color(0xFFF44336)
-        else -> Color(0xFFFFFFFF)
+        showAnswer && isCorrect -> Color(0xFF4CAF50) // Hijau jika benar
+        showAnswer && !isCorrect && isSelected -> Color(0xFFF44336) // Merah jika salah dan dipilih
+        else -> Color(0xFFFFFFFF) // Putih jika belum dipilih atau waktu habis
     }
 
     Button(
@@ -243,9 +220,9 @@ fun AnswerButton(
             .fillMaxWidth()
             .height(60.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor),
-        enabled = !showAnswer
+        enabled = !showAnswer // Nonaktifkan tombol setelah jawaban ditampilkan
     ) {
-        Text(text = answer, fontSize = 16.sp, color = Color.White)
+        Text(text = answer, fontSize = 16.sp, color = Color.Black)
     }
 }
 
@@ -254,4 +231,3 @@ data class QuestionSD(
     val answers: List<String>,
     val correctAnswerIndex: Int
 )
-

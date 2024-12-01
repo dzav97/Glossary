@@ -91,6 +91,11 @@
             android:label="profil"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
+        <activity
+            android:name=".ProfilEditActivity"
+            android:label="Riwayat"
+            android:theme="@style/Theme.Glossaryy"
+            android:exported="true" />
 
     </application>
 
