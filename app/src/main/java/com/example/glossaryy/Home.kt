@@ -1,10 +1,12 @@
 package com.example.glossaryy
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,7 +21,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
+import com.example.glossaryy.Quiz.QuizSD
+import com.example.glossaryy.Quiz.QuizSMP
 import com.example.glossaryy.ui.theme.GlossaryyTheme
+import androidx.compose.ui.platform.LocalContext
+import com.example.glossaryy.Quiz.QuizSMA
+import com.example.glossaryy.Quiz.QuizUmum
 
 class Home : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +44,7 @@ class Home : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
+    val currentContext = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,16 +57,18 @@ fun MainScreen() {
     ) {
         Text(
             text = "GLOSSARY",
-            fontFamily = FontFamily.Cursive,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.headlineLarge,
             fontSize = 24.sp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(16.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Card(
             shape = RoundedCornerShape(15.dp),
             elevation = CardDefaults.cardElevation(4.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -66,20 +77,18 @@ fun MainScreen() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.wajah),
-                        contentDescription = "Three stars",
+                        contentDescription = "user stars",
                         modifier = Modifier.size(30.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Hai, Dayinta",
-                        fontFamily = FontFamily.Cursive,
                         fontSize = 18.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Point",
-                    fontFamily = FontFamily.Cursive,
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -90,49 +99,99 @@ fun MainScreen() {
                 ) {
                     Text(
                         text = "5900",
-                        fontFamily = FontFamily.Cursive,
                         fontSize = 36.sp,
                         modifier = Modifier.padding(8.dp)
                     )
                 }
             }
         }
+
+        //kategori kuis
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Kategori Kuis",
-            fontFamily = FontFamily.Cursive,
             fontSize = 18.sp,
-            color = Color(0xFFD3D3D3)
+            color = Color(0xFFD3D3D3),
+            modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        //SD SMP
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            CategoryCard("SD", R.drawable.sd)
-            CategoryCard("SMP", R.drawable.smp)
+            CategoryCard("SD", R.drawable.sd) {
+                val intent = Intent(currentContext, QuizSD::class.java)
+                currentContext.startActivity(intent)
+
+            }
+            CategoryCard("SMP", R.drawable.smp) {
+                val intent = Intent(currentContext, QuizSMP::class.java)
+                currentContext.startActivity(intent)
+
+            }
         }
         Spacer(modifier = Modifier.height(16.dp))
+
+        //SMA & Umum
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            CategoryCard("SMA", R.drawable.sma)
-            CategoryCard("UMUM", R.drawable.umum)
+            CategoryCard("SMA", R.drawable.sma) {
+                val intent = Intent(currentContext, QuizSMA::class.java)
+                currentContext.startActivity(intent)
+
+            }
+            CategoryCard("UMUM", R.drawable.umum) {
+                val intent = Intent(currentContext, QuizUmum::class.java)
+                currentContext.startActivity(intent)
+
+            }
         }
+
+        // Bottom Navigation
         Spacer(modifier = Modifier.weight(1f))
-        HomeBottomNavigationBar()
+
+        //HomeBottomNavigationBar()
+
+        HomeBottomNavigationBar { destination ->
+            when (destination) {
+                "home" -> {
+                    // Tetap di halaman Home
+                }
+                "leaderboard" -> {
+                    val intent = Intent(currentContext, PeringkatActivity::class.java)
+                    currentContext.startActivity(intent)
+                }
+                "history" -> {
+                    val intent = Intent(currentContext, QuizHistoryActivity::class.java)
+                    currentContext.startActivity(intent)
+                }
+                "profile" -> {
+                    val intent = Intent(currentContext, ProfilActivity::class.java)
+                    currentContext.startActivity(intent)
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun CategoryCard(title: String, imageRes: Int) {
+fun CategoryCard(title: String, imageRes: Int, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .width(160.dp)
             .height(120.dp)
+            .padding(8.dp)
+            .clickable(onClick = onClick)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,7 +206,6 @@ fun CategoryCard(title: String, imageRes: Int) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
-                fontFamily = FontFamily.Cursive,
                 fontSize = 18.sp
             )
         }
@@ -155,7 +213,7 @@ fun CategoryCard(title: String, imageRes: Int) {
 }
 
 @Composable
-fun HomeBottomNavigationBar() {
+fun HomeBottomNavigationBar(onNavigate: (String) -> Unit) {
     BottomAppBar(
         containerColor = Color(0xFF3C0CA6),
         contentColor = Color.White,
@@ -166,28 +224,28 @@ fun HomeBottomNavigationBar() {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onNavigate("home")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.home),
                     contentDescription = "Home"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {  onNavigate("leaderboard") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.tropy),
-                    contentDescription = "Trophy"
+                    contentDescription = "leaderboard"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onNavigate("history") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.simpan),
-                    contentDescription = "Bookmark"
+                    contentDescription = "history"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { onNavigate("profil") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.user),
-                    contentDescription = "User"
+                    contentDescription = "profil"
                 )
             }
         }

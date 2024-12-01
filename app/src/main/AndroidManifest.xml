@@ -68,27 +68,27 @@
 
         <activity
             android:name=".Quiz.QuizSD"
-            android:label="Riwayat"
+            android:label="kuis"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
         <activity
             android:name=".Quiz.QuizSMP"
-            android:label="Riwayat"
+            android:label="kuis"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
         <activity
             android:name=".Quiz.QuizSMA"
-            android:label="Riwayat"
+            android:label="kuis"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
         <activity
             android:name=".Quiz.QuizUmum"
-            android:label="Riwayat"
+            android:label="kuis"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
         <activity
             android:name=".ProfilActivity"
-            android:label="Riwayat"
+            android:label="profil"
             android:theme="@style/Theme.Glossaryy"
             android:exported="true" />
 

@@ -1,5 +1,6 @@
 package com.example.glossaryy.Quiz
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,10 +10,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.glossaryy.Home
+import com.example.glossaryy.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -44,7 +50,9 @@ fun QuizApp() {
     var selectedAnswerIndex by remember { mutableStateOf<Int?>(null) }
     var answerShown by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableStateOf(10) }
+    var showExitDialog by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     fun goToNextQuestion() {
         if (currentQuestionIndex < questions.size - 1) {
@@ -63,20 +71,44 @@ fun QuizApp() {
         }
         if (!answerShown) {
             answerShown = true
-            delay(1000L) // Tampilkan jawaban benar selama 1 detik sebelum lanjut
+            delay(1500L) // Tampilkan jawaban benar selama 1 detik sebelum lanjut
             goToNextQuestion()
         }
+    }
+
+    if (showExitDialog) {
+        // Dialog konfirmasi keluar
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text(text = "Konfirmasi Keluar") },
+            text = { Text("Apakah yakin akan meninggalkan halaman kuis?") },
+            confirmButton = {
+                Button(onClick = {
+                    // Arahkan ke halaman Home
+                    val intent = Intent(context, Home::class.java)
+                    context.startActivity(intent)
+                }) {
+                    Text("Ya")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showExitDialog = false }) {
+                    Text("Tidak")
+                }
+            }
+        )
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(Color(0xff381E72), Color(0xffffffff))))
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        //horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Jumlah soal yang sudah dikerjakan
-        Text(
+        /*Text(
             text = "Soal ${currentQuestionIndex + 1}/${questions.size}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
@@ -115,6 +147,78 @@ fun QuizApp() {
                 }
             )
             Spacer(modifier = Modifier.height(8.dp))
+        }*/
+
+        // Header dengan progress soal
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Tombol panah kembali
+            IconButton(onClick = { showExitDialog = true }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_arrow_back_24), // Gambar panah kembali
+                    contentDescription = "Kembali",
+                    tint = Color.White
+                )
+            }
+            Text(
+                text = "Soal",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+            Text(
+                text = "${currentQuestionIndex + 1}/${questions.size}",
+                fontSize = 18.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        // Progress bar
+        LinearProgressIndicator(
+            progress = timeLeft / 10f,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
+            color = Color.Green,
+            trackColor = Color.White
+        )
+
+        // Pertanyaan
+        Text(
+            text = questions[currentQuestionIndex].question,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
+        // Pilihan jawaban
+        Column(modifier = Modifier.fillMaxWidth()) {
+            questions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
+                AnswerButton(
+                    answer = answer,
+                    isSelected = selectedAnswerIndex == index,
+                    isCorrect = index == questions[currentQuestionIndex].correctAnswerIndex,
+                    showAnswer = answerShown,
+                    onClick = {
+                        if (!answerShown) {
+                            selectedAnswerIndex = index
+                            answerShown = true
+                            scope.launch {
+                                delay(1500L) // Tampilkan jawaban selama 1 detik sebelum lanjut
+                                goToNextQuestion()
+                            }
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }
@@ -128,16 +232,17 @@ fun AnswerButton(
     onClick: () -> Unit
 ) {
     val backgroundColor = when {
-        showAnswer && isCorrect -> Color.Green
-        showAnswer && !isCorrect && isSelected -> Color.Red
-        else -> Color.LightGray
+        showAnswer && isCorrect -> Color(0xFF4CAF50)
+        showAnswer && !isCorrect && isSelected -> Color(0xFFF44336)
+        else -> Color(0xFFFFFFFF)
     }
 
     Button(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundColor),
+            .height(60.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor),
         enabled = !showAnswer
     ) {
         Text(text = answer, fontSize = 16.sp, color = Color.White)
