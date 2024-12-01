@@ -16,7 +16,17 @@
       <SelectionState runConfigName="ProfilActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+<<<<<<< HEAD
       <SelectionState runConfigName="ProfilEditActivity">
+=======
+      <SelectionState runConfigName="MainActivity">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Home">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="SplashScreenActivity">
+>>>>>>> bb881f150856fc38002cb3da97f220828e363d15
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
