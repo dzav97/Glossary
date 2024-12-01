@@ -352,7 +352,7 @@ class SignUpActivity : ComponentActivity() {
                         value = email.value,
                         onValueChange = { email.value = it },
                         label = { Text("Email") },
-                        placeholder = { Text("example@example.com") },
+                        placeholder = { Text("dayy@gmail.com") },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions.Default.copy(
                             keyboardType = KeyboardType.Email,
