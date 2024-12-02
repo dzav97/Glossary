@@ -1,10 +1,12 @@
 package com.example.glossaryy
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,7 +51,9 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                colors = listOf(Color(0xFF6A1B9A), Color(0xFFAB47BC))
+                colors = listOf(
+                    Color(0xFF3A007D), // Dark purple
+                    Color.White)
             )),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -67,6 +72,7 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileCard() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -74,19 +80,36 @@ fun ProfileCard() {
             .background(Color.White)
             .padding(16.dp)
     ) {
+        // Ikon Edit di pojok kanan atas kotak
+        IconButton(
+            onClick = {
+                val intent = Intent(context, ProfilEditActivity::class.java)
+                context.startActivity(intent)
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd) // Posisi di pojok kanan atas
+                .size(30.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.edit), // Ganti dengan ikon edit
+                contentDescription = "Edit Profile"
+            )
+        }
+
+        // Konten di dalam kotak
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Box(
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
                     .background(Color.White)
-                    .align(Alignment.CenterHorizontally)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.wajah), // Replace with your image resource
+                    painter = painterResource(id = R.drawable.wajah), // Ganti dengan sumber gambar Anda
                     contentDescription = "Profile picture of Dayinta Ayu Faj'rin",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -95,18 +118,41 @@ fun ProfileCard() {
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Dayinta Ayu Faj'rin", fontWeight = FontWeight.Bold, color = Color.Gray)
-            Text(text = "8 April 2006", color = Color.Gray)
-            Text(text = "Perempuan", color = Color.Gray)
-            Text(text = "dayinta88@gmail.com", color = Color.Gray)
-            Text(text = "5900 Poin", color = Color.Gray)
+            ProfileInfoBox(text = "Dayinta Ayu Faj'rin")
+            ProfileInfoBox(text = "8 April 2006")
+            ProfileInfoBox(text = "Perempuan")
+            ProfileInfoBox(text = "dayinta88@gmail.com")
+            ProfileInfoBox(text = "5900 Poin")
             Divider(color = Color(0xFF6A1B9A), thickness = 2.dp, modifier = Modifier.padding(top = 8.dp))
         }
     }
 }
 
+
+
+@Composable
+fun ProfileInfoBox(text: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+            .padding(8.dp),
+        contentAlignment = Alignment.Center // Mengatur teks di tengah-tengah
+    ) {
+        Text(
+            text = text,
+            fontWeight = FontWeight.Medium,
+            color = Color.Gray
+        )
+    }
+}
+
+
+
 @Composable
 fun ProfilBottomNavigationBar() {
+    val context = LocalContext.current
     BottomAppBar(
         containerColor = Color(0xFF3C0CA6),
         contentColor = Color.White,
@@ -117,25 +163,30 @@ fun ProfilBottomNavigationBar() {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { val intent = Intent(context, Home::class.java)
+                context.startActivity(intent)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.home),
                     contentDescription = "Home"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { val intent = Intent(context, PeringkatActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.tropy),
                     contentDescription = "Trophy"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { val intent = Intent(context, QuizHistoryActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.simpan),
                     contentDescription = "Bookmark"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { val intent = Intent(context, ProfilActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.user),
                     contentDescription = "User"

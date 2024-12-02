@@ -60,7 +60,7 @@ fun ProfilEditScreen() {
             .fillMaxSize()
             .background(
                 brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                    colors = listOf(Color(0xFF6A1B9A), Color(0xFFAB47BC))
+                    colors = listOf(Color(0xFF3A007D), Color.White)
                 )
             )
     ) {
