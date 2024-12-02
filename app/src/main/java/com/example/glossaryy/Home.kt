@@ -127,7 +127,7 @@ fun MainScreen() {
             )
             Spacer(modifier = Modifier.height(30.dp))
 
-            /*Row(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -149,37 +149,6 @@ fun MainScreen() {
                 }
                 CategoryCard("Level 4", R.drawable.level4) {
                     // Navigasi ke halaman kuis level 4
-                }
-            }*/
-
-            // Grid Kategori
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item {
-                    CategoryCard("Level 1", R.drawable.level1) {
-                        val intent = Intent(context, QuizSD::class.java)
-                        context.startActivity(intent)
-                    }
-                }
-                item {
-                    CategoryCard("Level 2", R.drawable.level2) {
-                        // Navigasi ke halaman kuis level 2
-                    }
-                }
-                item {
-                    CategoryCard("Level 3", R.drawable.level3) {
-                        // Navigasi ke halaman kuis level 3
-                    }
-                }
-                item {
-                    CategoryCard("Level 4", R.drawable.level4) {
-                        // Navigasi ke halaman kuis level 4
-                    }
                 }
             }
         }
