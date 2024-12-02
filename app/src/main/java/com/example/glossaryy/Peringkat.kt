@@ -1,13 +1,16 @@
 package com.example.glossaryy
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,28 +31,30 @@ class PeringkatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GlossaryyTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    PeringkatScreen().Peringkat()
-                }
+                PeringkatScreen()
             }
         }
     }
 }
 
-class PeringkatScreen {
-
-    @Composable
-    fun Peringkat() {
+@Composable
+fun PeringkatScreen() {
+    Scaffold(
+        bottomBar = { BottomNavigationBar() } // Menambahkan Bottom Navigation Bar
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding) // Menambahkan inner padding agar konten tidak tertutup navbar
+                .verticalScroll(rememberScrollState()) // Mengaktifkan scrolling
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(Color(0xFF673AB7), Color(0xFF9C27B0))
                     )
                 )
-                .padding(16.dp)
+                .padding(16.dp) // Padding luar untuk estetika
         ) {
+            // Header
             Text(
                 text = "PERINGKAT",
                 color = Color.White,
@@ -59,25 +65,20 @@ class PeringkatScreen {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Peringkat Teratas
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.Bottom
             ) {
                 TopRankItem(name = "Elda", score = 7300, imageRes = R.drawable.wajah, rank = 2)
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    TopRankItem(name = "Diaz", score = 7900, imageRes = R.drawable.wajah, rank = 1)
-                }
-                Spacer(modifier = Modifier.width(16.dp))
+                TopRankItem(name = "Diaz", score = 7900, imageRes = R.drawable.wajah, rank = 1)
                 TopRankItem(name = "Fadillah", score = 6800, imageRes = R.drawable.wajah, rank = 3)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Peringkat Lain
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,115 +93,115 @@ class PeringkatScreen {
                 RankItem(rank = 9, name = "Serlya", score = 5210, imageRes = R.drawable.wajah)
                 RankItem(rank = 10, name = "Azkha", score = 5030, imageRes = R.drawable.wajah)
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            BottomNavigationBar()
         }
     }
+}
 
-    @Composable
-    fun TopRankItem(name: String, score: Int, imageRes: Int, rank: Int) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(Color.White, shape = CircleShape)
-            ) {
-                Image(
-                    painter = painterResource(id = imageRes),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .background(Color(0xFFFF9900), shape = CircleShape)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Text(
-                        text = rank.toString(),
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            Text(text = name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            Box(
-                modifier = Modifier
-                    .background(Color(0xFFFF9900), shape = RoundedCornerShape(15.dp))
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-            ) {
-                Text(text = score.toString(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            }
-        }
-    }
-
-    @Composable
-    fun RankItem(rank: Int, name: String, score: Int, imageRes: Int) {
-        Row(
+@Composable
+fun TopRankItem(name: String, score: Int, imageRes: Int, rank: Int) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .background(Color(0xFFD1C4E9), shape = RoundedCornerShape(10.dp))
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .size(80.dp)
+                .background(Color.White, shape = CircleShape)
         ) {
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(80.dp)
                     .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = rank.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = score.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        }
+        Text(text = name, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Box(
+            modifier = Modifier
+                .background(Color(0xFFFF9900), shape = RoundedCornerShape(15.dp))
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+        ) {
+            Text(text = score.toString(), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
     }
+}
 
-    @Composable
-    fun BottomNavigationBar() {
-        Row(
+@Composable
+fun RankItem(rank: Int, name: String, score: Int, imageRes: Int) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .background(Color(0xFFD1C4E9), shape = RoundedCornerShape(10.dp))
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = imageRes),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF673AB7))
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+                .size(40.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = rank.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = score.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+fun BottomNavigationBar() {
+    val context = LocalContext.current
+
+    BottomAppBar(
+        containerColor = Color(0xFF3C0CA6),
+        contentColor = Color.White,
+        modifier = Modifier.height(80.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.home),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.tropy),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.simpan),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.user),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier.size(40.dp)
-            )
+            IconButton(onClick = {
+                val intent = Intent(context, Home::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.home),
+                    contentDescription = "Home"
+                )
+            }
+            IconButton(onClick = {
+                val intent = Intent(context, PeringkatActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.tropy),
+                    contentDescription = "Trophy"
+                )
+            }
+            IconButton(onClick = {
+                val intent = Intent(context, QuizHistoryActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.simpan),
+                    contentDescription = "Bookmark"
+                )
+            }
+            IconButton(onClick = {
+                val intent = Intent(context, ProfilActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.user),
+                    contentDescription = "User"
+                )
+            }
         }
     }
 }
