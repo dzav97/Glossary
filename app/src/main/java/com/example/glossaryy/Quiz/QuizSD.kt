@@ -1,5 +1,6 @@
 package com.example.glossaryy.Quiz
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.glossaryy.Home
+import com.example.glossaryy.QuizHistoryActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -130,6 +134,7 @@ fun QuizAppSD() {
 
 @Composable
 fun ResultScreen(score: Int, correctAnswers: Int, incorrectAnswers: Int) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -189,11 +194,17 @@ fun ResultScreen(score: Int, correctAnswers: Int, incorrectAnswers: Int) {
         }
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = { /* Logika level berikutnya */ }) {
+        Button(onClick = {
+            val intent = Intent(context, QuizSMP::class.java)
+            context.startActivity(intent)
+        }) {
             Text("Level Selanjutnya")
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { /* Logika halaman peringkat */ }) {
+        Button(onClick = {
+            val intent = Intent(context, QuizHistoryActivity::class.java)
+            context.startActivity(intent)
+        }) {
             Text("Lihat Halaman Peringkat")
         }
     }
