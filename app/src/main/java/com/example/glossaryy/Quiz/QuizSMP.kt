@@ -51,10 +51,15 @@ fun QuizAppSMP() {
     )
 
 
+    val randomQuestions = remember { questions.shuffled().take(5) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var selectedAnswerIndex by remember { mutableStateOf<Int?>(null) }
     var answerShown by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableStateOf(10) }
+    var score by remember { mutableStateOf(0) }
+    var correctAnswers by remember { mutableStateOf(0) }
+    var incorrectAnswers by remember { mutableStateOf(0) }
+    var isQuizFinished by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     fun goToNextQuestion() {

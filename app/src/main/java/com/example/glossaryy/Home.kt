@@ -8,8 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -17,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -127,7 +127,35 @@ fun MainScreen() {
             )
             Spacer(modifier = Modifier.height(30.dp))
 
-            Row(
+            // Gunakan LazyRow di sini untuk kategori kuis
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    CategoryCard("Level 1", R.drawable.level1) {
+                        val intent = Intent(context, QuizSD::class.java)
+                        context.startActivity(intent)
+                    }
+                }
+                item {
+                    CategoryCard("Level 2", R.drawable.level2) {
+                        // Navigasi ke halaman kuis level 2
+                    }
+                }
+                item {
+                    CategoryCard("Level 3", R.drawable.level3) {
+                        // Navigasi ke halaman kuis level 3
+                    }
+                }
+                item {
+                    CategoryCard("Level 4", R.drawable.level4) {
+                        // Navigasi ke halaman kuis level 4
+                    }
+                }
+            }
+
+            /*Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -150,7 +178,7 @@ fun MainScreen() {
                 CategoryCard("Level 4", R.drawable.level4) {
                     // Navigasi ke halaman kuis level 4
                 }
-            }
+            }*/
         }
     }
 }
@@ -161,7 +189,7 @@ fun CategoryCard(title: String, imageRes: Int, onClick: () -> Unit) {
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
-            .width(185.dp)
+            .fillMaxWidth(0.45f)
             .height(160.dp)
             .clickable { onClick() }
     ) {
@@ -194,7 +222,9 @@ fun HomeBottomNavigationBar() {
     BottomAppBar(
         containerColor = Color(0xFF3C0CA6),
         contentColor = Color.White,
-        modifier = Modifier.height(90.dp)
+        modifier = Modifier
+            .height(80.dp)
+            //.clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

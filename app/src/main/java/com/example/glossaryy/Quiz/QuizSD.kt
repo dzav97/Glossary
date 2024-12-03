@@ -4,19 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.glossaryy.Home
 import com.example.glossaryy.QuizHistoryActivity
+import com.example.glossaryy.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -24,13 +28,13 @@ class QuizSD : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            QuizAppSD()
+            QuizAppSD(onBackPressed = { finish() })
         }
     }
 }
 
 @Composable
-fun QuizAppSD() {
+fun QuizAppSD(onBackPressed: () -> Unit) {
     val questions = listOf(
         QuestionSD("Sebuah tabung memiliki jari-jari 7 cm dan tinggi 10 cm. Berapakah volume tabung tersebut?", listOf("1540 cm3", "1352 cm3", "1232 cm3", "1496 cm3"), 0),
         QuestionSD("Jika luas persegi adalah 144cm2, berapakah panjang sisinya?", listOf("10cm", "12cm", "14cm", "16cm"), 1),
@@ -74,63 +78,97 @@ fun QuizAppSD() {
         }
     }
 
-    if (isQuizFinished) {
-        ResultScreen(score, correctAnswers, incorrectAnswers)
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Soal ${currentQuestionIndex + 1}/${randomQuestions.size}",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(Color(0xFF4A148C), Color(0xFFCE93D8)),
+                )
             )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LinearProgressIndicator(
-                progress = timeLeft / 10f,
+    ) {
+        if (isQuizFinished) {
+            ResultScreen(score, correctAnswers, incorrectAnswers)
+        } else {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp),
-                color = Color.Green
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    IconButton(onClick = { onBackPressed() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_back), // Pastikan ada ikon panah di res/drawable
+                            contentDescription = "Kembali",
+                            tint = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Image(
+                        painter = painterResource(R.drawable.logo), // Pastikan file logo ada di res/drawable
+                        contentDescription = "Logo",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = randomQuestions[currentQuestionIndex].question, fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Soal ${currentQuestionIndex + 1}/${randomQuestions.size}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            randomQuestions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
-                AnswerButtonSD(
-                    answer = answer,
-                    isSelected = selectedAnswerIndex == index,
-                    isCorrect = index == randomQuestions[currentQuestionIndex].correctAnswerIndex,
-                    showAnswer = answerShown,
-                    onClick = {
-                        if (!answerShown) {
-                            selectedAnswerIndex = index
-                            answerShown = true
-                            if (index == randomQuestions[currentQuestionIndex].correctAnswerIndex) {
-                                score += 10
-                                correctAnswers++
-                            } else {
-                                incorrectAnswers++
-                            }
-                            scope.launch {
-                                delay(1000L)
-                                goToNextQuestion()
+                LinearProgressIndicator(
+                    progress = timeLeft / 10f,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
+                    color = Color.Green
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = randomQuestions[currentQuestionIndex].question,
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                randomQuestions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
+                    AnswerButtonSD(
+                        answer = answer,
+                        isSelected = selectedAnswerIndex == index,
+                        isCorrect = index == randomQuestions[currentQuestionIndex].correctAnswerIndex,
+                        showAnswer = answerShown,
+                        onClick = {
+                            if (!answerShown) {
+                                selectedAnswerIndex = index
+                                answerShown = true
+                                if (index == randomQuestions[currentQuestionIndex].correctAnswerIndex) {
+                                    score += 10
+                                    correctAnswers++
+                                } else {
+                                    incorrectAnswers++
+                                }
+                                scope.launch {
+                                    delay(1000L)
+                                    goToNextQuestion()
+                                }
                             }
                         }
-                    }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun ResultScreen(score: Int, correctAnswers: Int, incorrectAnswers: Int) {
