@@ -37,6 +37,9 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.glossaryy.Quiz.QuizSMA
+import com.example.glossaryy.Quiz.QuizSMP
+import com.example.glossaryy.Quiz.QuizUmum
 
 
 class Home : ComponentActivity() {
@@ -132,13 +135,13 @@ fun MainScreen() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = "Kategori Kuis",
                 fontSize = 18.sp,
-                color = Color(0xFFD3D3D3)
+                color = Color(0xFFffffff)
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Gunakan LazyRow di sini untuk kategori kuis
             LazyRow(
@@ -153,17 +156,20 @@ fun MainScreen() {
                 }
                 item {
                     CategoryCard("Level 2", R.drawable.level2) {
-                        // Navigasi ke halaman kuis level 2
+                        val intent = Intent(context, QuizSMP::class.java)
+                        context.startActivity(intent)
                     }
                 }
                 item {
                     CategoryCard("Level 3", R.drawable.level3) {
-                        // Navigasi ke halaman kuis level 3
+                        val intent = Intent(context, QuizSMA::class.java)
+                        context.startActivity(intent)
                     }
                 }
                 item {
                     CategoryCard("Level 4", R.drawable.level4) {
-                        // Navigasi ke halaman kuis level 4
+                        val intent = Intent(context, QuizUmum::class.java)
+                        context.startActivity(intent)
                     }
                 }
             }
@@ -195,16 +201,33 @@ fun MainScreen() {
             }*/
 
             // Panah untuk menampilkan info aplikasi
-            IconButton(
-                onClick = { showAppInfo = !showAppInfo },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                //horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
             ) {
-                Icon(
-                    imageVector = if (showAppInfo) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                    contentDescription = if (showAppInfo) "Hide Info" else "Show Info",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
+                Text(
+                    text = "Info Aplikasi",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF381E72)
                 )
+                Spacer(modifier = Modifier.width(8.dp)) // Memberi jarak antara ikon dan teks
+
+                IconButton(
+                    onClick = { showAppInfo = !showAppInfo },
+                    modifier = Modifier.size(50.dp)
+                ) {
+                    Icon(
+                        imageVector = if (showAppInfo) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                        contentDescription = if (showAppInfo) "Hide Info" else "Show Info",
+                        tint = Color(0xFF381E72),
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
             }
 
             // Info aplikasi dengan animasi
@@ -220,13 +243,13 @@ fun MainScreen() {
                         .background(Color(0xFFEFEFEF), RoundedCornerShape(16.dp))
                         .padding(16.dp)
                 ) {
-                    Text(
+                    /*Text(
                         text = "Info Aplikasi",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = Color(0xFF381E72)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))*/
                     Text(
                         text = "Aplikasi Glossaryy adalah platform edukasi yang menyediakan berbagai kuis menarik untuk meningkatkan pengetahuan Anda. Nikmati pengalaman belajar yang interaktif dengan beragam kategori kuis dan fitur peringkat yang membuat belajar menjadi menyenangkan!",
                         fontSize = 16.sp,
