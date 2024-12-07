@@ -1,6 +1,7 @@
 package com.example.glossaryy
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -223,6 +224,7 @@ fun ProfilEditCard() {
 
 @Composable
 fun ProfilEditBottomNavigationBar() {
+    val context = LocalContext.current
     BottomAppBar(
         containerColor = Color(0xFF3C0CA6),
         contentColor = Color.White,
@@ -233,25 +235,29 @@ fun ProfilEditBottomNavigationBar() {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /* TODO: Navigate to Home */ }) {
+            IconButton(onClick = { val intent = Intent(context, Home::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.home),
                     contentDescription = "Home"
                 )
             }
-            IconButton(onClick = { /* TODO: Navigate to Trophy */ }) {
+            IconButton(onClick = { val intent = Intent(context, PeringkatActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.tropy),
                     contentDescription = "Trophy"
                 )
             }
-            IconButton(onClick = { /* TODO: Navigate to Bookmark */ }) {
+            IconButton(onClick = { val intent = Intent(context, QuizHistoryActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.simpan),
                     contentDescription = "Bookmark"
                 )
             }
-            IconButton(onClick = { /* TODO: Navigate to User Profile */ }) {
+            IconButton(onClick = { val intent = Intent(context, ProfilActivity::class.java)
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.user),
                     contentDescription = "User"

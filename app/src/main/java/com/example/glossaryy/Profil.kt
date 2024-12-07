@@ -88,13 +88,16 @@ fun ProfileCard() {
             },
             modifier = Modifier
                 .align(Alignment.TopEnd) // Posisi di pojok kanan atas
-                .size(30.dp)
+                .wrapContentSize() // Menggunakan ukuran default dari gambar asli
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.edit), // Ganti dengan ikon edit
-                contentDescription = "Edit Profile"
+                contentDescription = "Edit Profile",
+                modifier = Modifier
+                    .padding(4.dp) // Opsional: Sesuaikan padding jika diperlukan
             )
         }
+
 
         // Konten di dalam kotak
         Column(
@@ -127,8 +130,6 @@ fun ProfileCard() {
         }
     }
 }
-
-
 
 @Composable
 fun ProfileInfoBox(text: String) {
@@ -164,8 +165,7 @@ fun ProfilBottomNavigationBar() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { val intent = Intent(context, Home::class.java)
-                context.startActivity(intent)
-            }) {
+                context.startActivity(intent) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.home),
                     contentDescription = "Home"
