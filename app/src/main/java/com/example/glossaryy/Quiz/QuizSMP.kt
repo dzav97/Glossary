@@ -1,18 +1,26 @@
 package com.example.glossaryy.Quiz
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.glossaryy.QuizHistoryActivity
+import com.example.glossaryy.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -20,13 +28,13 @@ class QuizSMP : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            QuizAppSMP()
+            QuizAppSMP(onBackPressed = { finish() })
         }
     }
 }
 
 @Composable
-fun QuizAppSMP() {
+fun QuizAppSMP(onBackPressed: () -> Unit) {
     val questions = listOf(
         QuestionSMP("Seekor kambing memiliki berat badan 30 kg. Jika beratnya bertambah 15%, berapakah beratnya sekarang?", listOf("33 kg", "34.5 kg", "35 kg", "36 kg"), 1),
         QuestionSMP("Siapakah penulis novel 'Laskar Pelangi'?", listOf("Andrea Hirata", "Tere Liye", "Pramoedya Ananta Toer", "Habiburrahman El Shirazy"), 0),
@@ -51,81 +59,207 @@ fun QuizAppSMP() {
     )
 
 
+    val randomQuestions = remember { questions.shuffled().take(5) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var selectedAnswerIndex by remember { mutableStateOf<Int?>(null) }
     var answerShown by remember { mutableStateOf(false) }
     var timeLeft by remember { mutableStateOf(10) }
+    var score by remember { mutableStateOf(0) }
+    var correctAnswers by remember { mutableStateOf(0) }
+    var incorrectAnswers by remember { mutableStateOf(0) }
+    var isQuizFinished by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     fun goToNextQuestion() {
-        if (currentQuestionIndex < questions.size - 1) {
+        if (currentQuestionIndex < randomQuestions.size - 1) {
             currentQuestionIndex++
             selectedAnswerIndex = null
             answerShown = false
             timeLeft = 10 // Reset timer
+        } else {
+            isQuizFinished = true
         }
     }
 
+
     LaunchedEffect(currentQuestionIndex) {
-        // Countdown timer
         while (timeLeft > 0 && !answerShown) {
-            delay(1000L) // 1 detik
+            delay(1000L)
             timeLeft--
         }
         if (!answerShown) {
             answerShown = true
-            delay(1000L) // Tampilkan jawaban benar selama 1 detik sebelum lanjut
+            incorrectAnswers++
+            delay(1000L)
             goToNextQuestion()
         }
     }
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(Color(0xFF4A148C), Color(0xFFCE93D8)),
+                )
+            )
+    ) {
+        if (isQuizFinished) {
+            ResultScreen(score, correctAnswers, incorrectAnswers)
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    IconButton(onClick = { onBackPressed() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_back), // Pastikan ada ikon panah di res/drawable
+                            contentDescription = "Kembali",
+                            tint = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Image(
+                        painter = painterResource(R.drawable.logo), // Pastikan file logo ada di res/drawable
+                        contentDescription = "Logo",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Soal ${currentQuestionIndex + 1}/${randomQuestions.size}",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LinearProgressIndicator(
+                    progress = timeLeft / 10f,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp),
+                    color = Color.Green
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = randomQuestions[currentQuestionIndex].question,
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                randomQuestions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
+                    AnswerButtonSD(
+                        answer = answer,
+                        isSelected = selectedAnswerIndex == index,
+                        isCorrect = index == randomQuestions[currentQuestionIndex].correctAnswerIndex,
+                        showAnswer = answerShown,
+                        onClick = {
+                            if (!answerShown) {
+                                selectedAnswerIndex = index
+                                answerShown = true
+                                if (index == randomQuestions[currentQuestionIndex].correctAnswerIndex) {
+                                    score += 10
+                                    correctAnswers++
+                                } else {
+                                    incorrectAnswers++
+                                }
+                                scope.launch {
+                                    delay(1000L)
+                                    goToNextQuestion()
+                                }
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
+}
+@Composable
+fun ResultScreenSMP(score: Int, correctAnswers: Int, incorrectAnswers: Int) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF9C27B0)) // Background ungu
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Jumlah soal yang sudah dikerjakan
         Text(
-            text = "Soal ${currentQuestionIndex + 1}/${questions.size}",
+            text = "GLOSSARY",
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = Color.White
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Progress bar untuk countdown detik
-        LinearProgressIndicator(
-            progress = timeLeft / 10f,
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp),
-            color = Color.Green
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Teks pertanyaan
-        Text(text = questions[currentQuestionIndex].question, fontSize = 20.sp)
-
-        Spacer(modifier = Modifier.height(16.dp))
-        questions[currentQuestionIndex].answers.forEachIndexed { index, answer ->
-            AnswerButtonSMP(
-                answer = answer,
-                isSelected = selectedAnswerIndex == index,
-                isCorrect = index == questions[currentQuestionIndex].correctAnswerIndex,
-                showAnswer = answerShown,
-                onClick = {
-                    if (!answerShown) {
-                        selectedAnswerIndex = index
-                        answerShown = true
-                        scope.launch {
-                            delay(1000L) // Tampilkan jawaban selama 1 detik sebelum lanjut
-                            goToNextQuestion()
-                        }
-                    }
-                }
+                .size(120.dp)
+                .background(Color(0xFFD1C4E9), shape = MaterialTheme.shapes.medium),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "$score",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
-            Spacer(modifier = Modifier.height(8.dp))
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Green, shape = MaterialTheme.shapes.medium)
+                    .padding(16.dp)
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Benar", fontSize = 18.sp, color = Color.White)
+                    Text("$correctAnswers", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .background(Color.Red, shape = MaterialTheme.shapes.medium)
+                    .padding(16.dp)
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Salah", fontSize = 18.sp, color = Color.White)
+                    Text("$incorrectAnswers", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = {
+            val intent = Intent(context, QuizSMA::class.java)
+            context.startActivity(intent)
+            (context as? Activity)?.finish()
+        }) {
+            Text("Level Selanjutnya")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            val intent = Intent(context, QuizHistoryActivity::class.java)
+            context.startActivity(intent)
+        }) {
+            Text("Lihat Halaman Peringkat")
         }
     }
 }
